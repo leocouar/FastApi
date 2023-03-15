@@ -6,3 +6,7 @@ class User(BaseModel):
     Username:str
     Fullname:str
     Password:str
+    IsAdmin:Optional[int] = 0
+    
+    class Config:
+        orm_mode = True
