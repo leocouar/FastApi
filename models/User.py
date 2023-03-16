@@ -12,7 +12,7 @@ from sqlalchemy import Column, Integer, Numeric, String, Table
 class Users(Base):
     __tablename__ = 'Users'
 
-    Id = Column(Integer, primary_key=True, unique=True)
+    Id = Column(Integer, primary_key=True, unique=True,autoincrement=True)
     Username = Column(String(50), nullable=False)
     Fullname = Column(String(200))
     Password = Column(String(120), nullable=False)

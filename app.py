@@ -1,7 +1,7 @@
 from fastapi import Depends, FastAPI, HTTPException
 from sqlalchemy.orm import Session
 from config.db import SessionLocal
-from schemas.user import User
+from schemas.user import User, UserLogin
 from models.User import Users
 from services import userServices as us
 
@@ -39,7 +39,17 @@ def read_user(user_id: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="User not found")
     return db_user
 
-@app.delete("/users/{user_id}", response_model=User)
+@app.delete("/users/{user_id}")
 def delete_user(user_id: int, db: Session = Depends(get_db)):
-    us.delete_user(db,user_id=user_id)
+    db_user = us.get_user(db, user_id=user_id)
+    us.delete_user(db,db_user)
     return {"message": "Item deleted successfully"}
+
+@app.post("/login/")
+def login_user(user :UserLogin ,db: Session = Depends(get_db)):
+    usuario = us.get_user_by_Username(db,Username= user.Username)
+    password = us.decrypt(usuario.Password,user.Password)
+    if password:
+        return usuario
+    else:
+        return {"message": "Usuario o contraseña incorrecto"}
