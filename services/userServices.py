@@ -3,8 +3,6 @@ from models.User import Users
 from schemas.user import User
 from cryptography.fernet import Fernet
 from werkzeug.security import generate_password_hash,check_password_hash
-key = open("key.key", "rb").read()
-f= Fernet(key)
 
 def get_user(db: Session, user_id: int):
     return db.query(Users).filter(Users.Id == user_id).first()
